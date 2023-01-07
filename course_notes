@@ -1,0 +1,112 @@
+#setting virtual environment
+# create terminal: py -3 -m venv venv
+# run terminal: cmd terminal : "API project"\venv\Scripts\activate.bat 
+
+#install all fastapi (+depdendencies) pip install fastapi[all]
+#to check libs pip freexe
+#to activate fastapi server: uvicorn main:app #variable
+#to make auto reload server uvicorn main:app --reload 
+
+#hacer las variables lo más explícitas possibles, si es para login .. p.e login_user
+
+#FastAPi retorna los paths según orden, si hay dos iguales devuelve el primero
+#esto puede ocasionar un error por ejemplo /posts/latest podría ser /posts/{id}, puesto que puede leer latest con id
+
+
+#2) POSTMAN es una aplicación para evitar crear un frontend para testear API
+ - sirve para testear
+
+
+ #PYDANTIC used to create basemodels which check the payload data received from posts requests
+
+  #CRUD stands for Create (Post), Read(Get), Update (Update/Patch), Delete (delete)
+
+'''#Naming APIS best practices:
+1) Use plural names
+2) unique name
+3) sustantives
+** POSTS  // USERS // NAMES
+'''
+(Asdf)   asdf('marc')
+
+#status and responses code can be send it back to frontend 
+# by status module (by status..) or Repspone directly with code (i.e 404)
+# BOTH are hardcoded, you can use module FastApi HTTPEXCEPTION
+
+A folder has to contain __init__.py
+
+
+#3) POSTGRES SQL --> SETTING DATABASE:
+ -  Download Postgres + Install PGADMIN
+
+ 4) to create rows in postgres db we dont create query with f strings like {} to avoid sql injection attack. instead we use %s values 
+
+
+ 5) Preferred method with SQL to interact with Relational DB. But is possible to work with ORM (Object Relational Mapper), Layer of abstraction that sits between the db and us:
+        Instead of working with SQL we work directly with Python 
+        Instead of manually define the tables in postgres it is done in python with classes, (PYTHON MODELS)
+        Most popular ORM is Sqlachemy => it is not a Database Driver, as we use Postgres we use psycopg2!
+        to connect Sqlalchemy with url : SQLALCHEMY_DATABASE_URL = 'postgresql://<username>:<password>@<ip-adres>/hostname>/<database>'
+        Once we open the code it checks if the table is there if not it will create it. If it exsists the model we created will not be updated (for example constraints, defualts...)
+        so when you do migrations or db schema changes we should use Alembic
+
+
+6) Schema/Pydantic MOdels define the structure of a requests&response, this ensures the data flow&&validation between server<>user:
+      - SQLALCHEMY Models are responsible for defining the columns of our ''posts'' table within postgres
+
+7) Hash the passwords to safe it on DB, with passlib library[bcrypt]
+
+8) Cleaning code: we split the main file by the different endpoints topics, so we create a routers folder, and 1 py-file for POSTS and 1 py-file for USERS, we import modules needed, and create an APIRouter object that we'll import to our main file, which will work as a Requests distributor to the scope file.
+
+9) JWT Token Authentication :
+    - Login with username + password
+    - API checks if credentials are valid? sign JWT Token (not encrypted, it has information) and send to user:reject
+    - Client send the request with the token
+    - API Checks token is valid? sends data:reject
+
+    --  JWT Token -- has 3 parts, {header}.{payload}.{verifysignature[header+payload+secretBackendData]}
+
+10) query paramaters funcionan añadiendo args intro functions with default values and then apply those values to the database query
+            - offset (how pagination works)
+            - limit
+
+11) environment variables to store passwords/secrets, it is created into our computer/machine which can be called by our program, this avoid us to hardcode our variables with secrets.
+    Variables can be stored in a .env file and then imported inside the class in config, which we store the variables names and types.
+
+REMEMBER TO CREATE A GIT IGNORE TO IGNORE SUBMITING CONFIDENTIAL DATA:
+      - __pycache__
+      - venv //our virtual environment
+      - .env //our virtual variables
+
+12)VOTING SYSTEM - REQUIRES:
+   - Composite KEYs: primary key of +1 column unified, so we will avoid a user_id like the same post_id twice.
+   
+13) sql alchemy does not allow to change the properties of a table, so we will have to use ALEMBIC --> database migration tool + track changes and rollback those
+
+ALEMBIC:
+- pip install alembic
+- alembic init alembic
+- add our Base from models (where we have all tables data) (declarative base of sqlalchemy in alembic env)
+    - target_metadata = Base.metadata
+- add our database link to the alembic file .ini
+    - config = context.config
+    config.set_main_option(
+        "sqlalchemy.url",'postgresql+psycopg2://{settings.database_username}:\
+        {settings.database_password}@{settings.database_hostname}/{settings.database_name}'
+    )
+- alembic version and alembic version -m "name of version" --> creates a file with functions to upgrade (make changes) or downgrade (rollback) all however, has to be coded.
+- alembic upgrade 1d81334b23ed 
+
+13.1) However it is not needed to code every table model from scratch, ALembic is intelligent enough to read our current models and update our database. That's with the -autogenerate.
+
+14) CORS
+
+        origins = ["*"]         #domains that can interact with our API to avoid CORS errors, if it is a current webapp, just will be your domain for security best pracitices
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=origins,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
