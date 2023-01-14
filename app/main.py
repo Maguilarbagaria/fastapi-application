@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = ["https://www.google.com"] #domains that can interact with our API to avoid CORS errors
+origins = ["*"]         #domains that can interact with our API to avoid CORS errors, if it is a current webapp, just will be your domain for security best pracitices
 
 app.add_middleware(
     CORSMiddleware,

@@ -110,3 +110,16 @@ ALEMBIC:
             allow_methods=["*"],
             allow_headers=["*"],
         )
+
+15) GIT
+    a) In vscode, terminal in dir, "git init"
+    b) Add files into git, "git add --all"
+    c) Commit our changes, "git commit -m 'What changes I made string'
+
+16) HEROKU DEPLOYMENT
+    - install
+    - login in terminal
+    - heorku create 'app name'
+    - create 'Procfile' in main directory and give the commands for running the app:
+        - web: uvicorn app.main:app --host=0.0.0.0 --port=${PORT:-5000}
+        
