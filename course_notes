@@ -122,4 +122,127 @@ ALEMBIC:
     - heorku create 'app name'
     - create 'Procfile' in main directory and give the commands for running the app:
         - web: uvicorn app.main:app --host=0.0.0.0 --port=${PORT:-5000}
+
+    - for the use of Postgres, you can install an Addon inside heroku in terminal (See docs) and will give you all the info to then create .ENV 
+    to connect and make your code work. (Remind to put the heroku web env variables the same name as our code)
+    - then we restart the app with "heroku ps:restart"
+    - "heroku logs -t" to check the logs
+    - heroku apps:info "name of app" --> to get all the info like url, git heroku, ...
+    - We can connect to the instance given by Heroku in our PG and well see we dont have any tables.
+    - When we run our app in server production we don't use alembic versions, it's just for development we use them. We have to run the "alembic upgrade head"
+    withing terminal "heroku run 'alembic upgrade head'"
+    - changes have to be add, commit and push in git: git push heroku main
         
+17) DIGITALOCEAN DEPLOYMENT 5$/mth
+
+
+18)docker creates an image (containter)to run our app. Dockerfile is the settings, check "Simple tags" in documentation. We copy the requirements and run them to install all deps.
+    Anytime you change your source code just need to run the COPY . . , if changes the requirements.txt run the command of RUN... (longest one)
+
+    a) After auth in Docker Desktop we can create our container by:
+            ``docker build -t .`` #current repository where we have our 'Dockerfile' created
+            After, we can check what images we have created inside `docker image ls`
+            Is it preferred to use `docker compose` instead of `docker run`:
+b) We create an .yml called `docker-compose.yml` to set our configurations for composing.
+        - <port on localhost>:<port on container> #if receives traffic from local host send to port on container, which our containter port is set in Dockerfile in the CMD command. So if we replace the <> it will be:
+            8000:8000
+
+c) ``docker-compose up -d`` --> to finally run container
+    ``docker-compose up --build`` #to rebuild the image
+
+d)  ``docker ps`` #show running conatiners
+    ``docker ps -a`` #show all containters not just running ones
+    ``docker logs`` #show logs to check errors.
+    ``docker-compose down`` #shut down
+    ``docker exec -it apiproject-api-1 bash`` #get linux container terminal to check scripts running
+
+e) for not hardcoding variables:
+        USE ENVIRONMENT VARIABLES IN DOCKER:
+        in the docker-compose.yml:
+            env_file:
+                - ./.env 
+f) now we create and build our image for python, we have to get docker image from DockerHub web. 
+**IMPORTANT**
+ WHEN WE DELETE A CONTAINER WE LOOSE OUR DATA, AND THAT'S NOT THE BEHAVIOUR WE WANT IN DATABASE mgM 
+ To avoid that we create under postgres services in docker-compose we add the volumes property.
+**IMPORTANT**
+
+g) We create Volumnes for our api to get our container has realtime changes, and avoid delete (down) and create (up) at every change.
+        volumes:
+      - ./:/usr/src/app:ro #: = curr dir `ro`= read only
+        command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+h) DockerHub works as Github. You can create a repository and push our images to online repo.
+
+i) It is good to create 2 dockers containers 1 for dev and 1 for prod as it will be slight changes (no hardcoded credentials, no reloads, ...). For then running docker-compose we have to specify the configuration file like `docker-compose -f {file name.xml} up -d`
+
+j) to investigate the images inside containers `docker exec -it apiproject-postgres-1 bash`
+    Access PostgreSQL using psql: Once you're inside the container's terminal, you can use the `psql` command-line tool to interact with the PostgreSQL database. 
+    To access the PostgreSQL shell: `psql -U postgres`
+    List all databases: ``\l``
+    Connect to a specific database: ``\c database_name``
+    List tables in the current database: ``\dt``
+
+
+    At 13:55:05 for those who wondering what causing the Internal server error. In the postgres docker container the tables are not creating, so we need to create the tables in order perform the requested action on localhost:8000.
+    Follow these steps it has worked for me
+    1) Put the command docker ps and find your container ID
+    2) Then enter into the bash -> docker exec -t YOUR_CONTAINER_ID bash
+    3) Now it will enter into the bash, type -> alembic upgrade head
+    This will fix the issue by creating the tables to perform the action. Now go to Postman API and run the create user request, it will work. But the only issue is the data is not storing.
+
+
+
+TESTING
+
+1) pytest is a library to perform tests
+
+2) `pytest` will only take the autodiscover of tests if the file name is called 'test_xxXX' as well as functions contains prefix 'test'
+
+3) In the folder of the test, we need an __init__.py file to let the directory import it as module.
+
+4) `pytest -v` give more details of test functions.
+    `pystest -v -s` give also print details
+    `pytest -v -s {file}`
+    `pytest --disable-warnings -v` to avoid warnings
+
+5) to create chunk tests for each function we can use wrapper @pytest.mark.parametrize:
+    @pytest.mark.parametrize("num1, num2, expected", [
+    (3,2,5),
+    (10,5,15),
+    (620,15,635)
+]) --> last parameter èxpected is the result to assert.
+
+6) to avoid repeating the instance of initialize a class we can create a @pytest.fixture wrapper with returning the class initialization, then we pass it as argument of the real test and refers it to assert. It is a function that will run before our test.
+
+7) we can specify an error raise to be in a test by specifying `with pytest.raises(exception): _code that will raise the error_`
+
+8)FASTAPI testing
+    a)  we use fastpi.testclient to send requests to our endpoints `from fastapi.testclient import TestClient`.
+    We initialise by specifying our the client referring to our starting point (main.app)
+
+9) CASCADE - IF YOU WANT TO STOP MOVING FORWARD WHEN A TEST FAIL WE CAN CREATE THIS BEHAVIOUR BY  --> ``
+
+10) we can use our schemas and pydantic models to also check responses in our tests.
+    We do not want to create test users in our production db so we create a new database
+    To do that we use ``override testing databases `` in fastapi. It overrides all the code we use in a specific session with the testing session.
+        app.dependency_overrides[get_db] = override_get_db #in testing we create a different sessiion for testing purposes
+
+11) to delete our user created for test purposes we can create a `fixture` that instead `returning` our client database for test it will first `yield` the client creating all needed tables and then droping them all.
+        - Create all <<Base.metadata.create_all(bind= engine)>>
+        - Delete all <<ase.metadata.drop_all(bind= engine)>>
+    we can change the order to check manually the test created.
+
+12) We can replicate previous step with `alembic`:
+    Inside the fixture we can create `command.updrage("head")` yield, and then `command.downgrade("base")`
+
+13) We can use called `scopes` within fixtures and testing to let us check the login before deleting the user created.
+    - changing the fixture scope to default `function` to `module` (note also existing `session` to just run the fixture once for entire test in all modules), so we have access to testing database for entire module test (i.e. test_users.py)
+
+    However we do not want to create tests linked to other tests (create user and then login with the same user) --> bad practices, not good to change the fixture to module to solve our case, te best practies is:
+        - do a test that previously creates user and login user for login testing
+        - create user seperately testing
+
+14) We can create a conftest.py file inside test foler to specify all of our fixtures to let all tests have access to them. All other tests files have access. With no need to import from conftest...
+
+15) to check both incorrect logins per email and password, we can create pytest.mark.parametrize.

@@ -47,6 +47,14 @@ class UserLogin(BaseModel):
     class Config:
         orm_mode = True
 
+class UserOut(BaseModel):
+    email: EmailStr
+    id: int
+    created_at: datetime
+    class Config:
+        orm_mode = True
+
+
 class Token(BaseModel):
     access_token:str
     token_type:str
