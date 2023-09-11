@@ -246,3 +246,5 @@ TESTING
 14) We can create a conftest.py file inside test foler to specify all of our fixtures to let all tests have access to them. All other tests files have access. With no need to import from conftest...
 
 15) to check both incorrect logins per email and password, we can create pytest.mark.parametrize.
+
+16) In SQLALCHEMY we can create multiple rows in a table (situation createing multiple posts for testing reasons) with `session.add_all([list])`
