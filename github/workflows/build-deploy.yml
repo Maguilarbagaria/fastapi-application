@@ -8,7 +8,7 @@ jobs:
       - name: pulling git repo
         uses: actions/checkout@v2
       - name: say hi to marc
-        run: echo "Hello Marc, welcome!"
+        run: echo "Hello Marc, welcome! :)"
       - name: set up python 3.9 in VM 
         uses: actions/setup-python@v2
         with:
