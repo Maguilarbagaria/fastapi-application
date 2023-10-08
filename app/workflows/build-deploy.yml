@@ -1,0 +1,11 @@
+name: Build and Deploy
+on: ["push", "pull request"]
+
+jobs:
+  name_of_job: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: pulling git repo
+        uses: actions/checkout@v2
+      - name: say hi to marc
+        run: echo "Hello Marc, welcome!"
