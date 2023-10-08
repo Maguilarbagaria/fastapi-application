@@ -17,8 +17,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
+          POSTGRES_PASSWORD: AguilarAPI2022
+         # POSTGRES_DB: ${{secrets.DATABASE_NAME}}_test
         ports:
         - 5432:5432
         options: >-
