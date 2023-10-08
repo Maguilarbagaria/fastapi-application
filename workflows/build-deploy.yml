@@ -1,5 +1,5 @@
 name: Build and Deploy
-on: ["push", "pull request"]
+on: ["push", "pull_request"]
 
 jobs:
   name_of_job: 
