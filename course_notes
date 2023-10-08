@@ -256,3 +256,4 @@ CD/CI -> `continuous deployment continuous integration`
 
 by creating a folder called workflows (read git docs) and placing a yaml `build-deploy.yml` with configuration about virtual machine (runs-on) and steps as well as on what git actions(pull, push...) and branches
 
+we should add environment variables to Git VM to allow doing all the tests. we can set it inside the yml as "env" down the job.
