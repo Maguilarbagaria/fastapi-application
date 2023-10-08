@@ -4,17 +4,15 @@ on: ["push", "pull_request"]
 jobs:
   name_of_job: 
     env: 
-      DATABASE_HOSTNAME = localhost
-      DATABASE_PORT = 5432
-      DATABASE_PASSWORD = AguilarAPI2022
-      DATABASE_NAME = fastapi
-      DATABASE_USERNAME = postgres
-      SECRET_KEY = "09asdf0a9s9dfa0w9erawgn2p938r932829tn29gn39g8ngnaksdjndjkv9a483840248g782vn89na0s89vna878df0182431asdf"
-      ALGORITHM = "HS256"
-      ACCESS_TOKEN_EXPIRE_MIN = 15
+      DATABASE_HOSTNAME : ${{secrets.DATABASE_HOSTNAME}}
+      DATABASE_PORT : ${{secrets.DATABASE_PORT}}
+      DATABASE_PASSWORD : ${{secrets.DATABASE_PASSWORD}}
+      DATABASE_NAME : ${{secrets.DATABASE_NAME}}
+      DATABASE_USERNAME : ${{secrets.DATABASE_USERNAME}}
+      SECRET_KEY : ${{secrets.SECRETS_KEY}}
+      ALGORITHM : ${{secrets.ALGORITHM}}
+      ACCESS_TOKEN_EXPIRE_MIN : ${{secrets.ACCESS_TOKEN_EXPIRE_MIN}}
     runs-on: ubuntu-latest
-
-
     steps:
       - name: pulling git repo
         uses: actions/checkout@v2
