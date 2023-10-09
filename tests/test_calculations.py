@@ -1,5 +1,5 @@
 import pytest
-from OwnProjects.APIproject.tests.calculations import add, substract, multiply, BankAccount, InsufficientFunds
+from .calculations import add, substract, multiply, BankAccount, InsufficientFunds
 
 
 @pytest.fixture
