@@ -4,8 +4,8 @@
 
 From their [web](https://www.freecodecamp.org/news/creating-apis-with-python-free-19-hour-course/):
 
-_A lot of API tutorials just teach the absolute minimum. But a production-ready API is much more complicated than what most tutorials teach. We just published a massive 19-hour course on the freeCodeCamp.org YouTube channel that will teach you how to build a full-fledged API using Python and the FastAPI library
-### Sanjeev Thiyagarajan developed this course. Sanjeev is a great teacher and really knows how to break things down for beginners._
+_A lot of API tutorials just teach the absolute minimum. But a production-ready API is much more complicated than what most tutorials teach. We just published a massive 19-hour course on the freeCodeCamp.org YouTube channel that will teach you how to build a full-fledged API using Python and the FastAPI library_
+### Sanjeev Thiyagarajan developed this course. Sanjeev is a great teacher and really knows how to break things down for beginners.
 
 ***
 The API built in this course is for a social-media-type application where users can create/read/delete/update posts as well as like other users posts.  It includes user registration and authentication.
