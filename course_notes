@@ -261,4 +261,8 @@ TO avoid hardcoding our variables in a public file to configure our `venv` we ca
 
     for the CI --> we should create a docker hub wih a repositor to continuously integrate our updates via github --> see https://docs.docker.com/build/ci/github-actions/
 
-    fot CD (pushing to our production environment) 
+    fot CD (pushing to our production environment):
+        We create a new job that depends on the previous 1 to avoid trying to push errors or not working CI to our production environmnet.
+        a) Afterwards we configure that job to push to our deployment environment. In case it is heroku it would be a bunch of commands to update our Heroku code.
+                OR
+        b) we can look at the github marketplace to get already created actions to configure that deployment to heroku.
