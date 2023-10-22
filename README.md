@@ -8,7 +8,7 @@ _A lot of API tutorials just teach the absolute minimum. But a production-ready 
 ### Sanjeev Thiyagarajan developed this course. Sanjeev is a great teacher and really knows how to break things down for beginners.
 
 ***
-The API built in this course is for a social-media-type application where users can create/read/delete/update posts as well as like other users posts.  It includes user registration and authentication.
+The API built in this course is for a `social-media-type application` where users can `create/read/delete/update posts as well as like other users posts`.  It includes `user registration and authentication`.
 
 First you will learn learn the fundamentals of API design including routes, serialization/deserialization, schema validation, and models. You will also learn about how to setup and use SQL databases.
 
