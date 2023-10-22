@@ -258,3 +258,7 @@ by creating a folder called workflows (read git docs) and placing a yaml `build-
 
 we should add environment variables to Git VM to allow doing all the tests. we can set it inside the yml as "env" down the job.
 TO avoid hardcoding our variables in a public file to configure our `venv` we can use `secrets` of #git 
+
+    for the CI --> we should create a docker hub wih a repositor to continuously integrate our updates via github --> see https://docs.docker.com/build/ci/github-actions/
+
+    fot CD (pushing to our production environment) 

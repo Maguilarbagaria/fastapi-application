@@ -2,7 +2,7 @@ name: Build and Deploy
 on: ["push", "pull_request"]
 
 jobs:
-  name_of_job: 
+  build: 
     env: 
       DATABASE_HOSTNAME : ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT : ${{secrets.DATABASE_PORT}}
@@ -46,17 +46,25 @@ jobs:
           pip install pytest
           pytest
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+      # - name: Build and push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    steps:
+      - name: deploying code
+        run: echo "Deploying new changes"
